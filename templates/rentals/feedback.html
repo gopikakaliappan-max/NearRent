@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Feedback — NearRent{% endblock %}
+{% block content %}
+<section class="page-intro"><span class="eyebrow">MAKE IT BETTER</span><h1>Your feedback matters.</h1><p>Help us improve the rental experience.</p></section>
+<div class="form-card narrow-card"><form method="post">{% csrf_token %}{{ form.as_p }}<button class="button button-primary" type="submit">Share feedback ↗</button></form></div>
+{% if recent_feedback %}<section class="section-block"><div class="section-heading"><div><h2>Community notes</h2><p>Recent feedback shared by users.</p></div></div><div class="feedback-grid">{% for item in recent_feedback %}<article class="feedback-card"><div class="stars">{% for i in "12345" %}{% if forloop.counter <= item.rating %}★{% else %}☆{% endif %}{% endfor %}</div><p>{{ item.comment }}</p><small>{{ item.user.first_name|default:item.user.username }} · {{ item.created_at|date:"d M Y" }}</small></article>{% endfor %}</div></section>{% endif %}
+{% endblock %}

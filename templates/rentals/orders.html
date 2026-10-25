@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Orders — NearRent{% endblock %}
+{% block content %}
+<section class="page-intro"><span class="eyebrow">YOUR RENTAL SPACE</span><h1>Orders & handovers.</h1><p>Keep track of requests, messages, delivery, condition reports and returns.</p><a class="button button-primary" href="{% url 'register_product' %}">+ List an item</a></section>
+<div class="orders-list">
+{% for booking in bookings %}
+<article class="order-card">
+  <div class="order-card-top"><div><span class="booking-id">BOOKING #{{ booking.id }}</span><h2>{{ booking.product.title }}</h2><p>{{ booking.start_date|date:"d M Y" }} – {{ booking.end_date|date:"d M Y" }} · {{ booking.get_delivery_method_display }}</p></div><span class="status-pill status-{{ booking.status }}">{{ booking.get_status_display }}</span></div>
+  <div class="order-facts"><div><small>Renter</small><strong>{{ booking.renter.first_name|default:booking.renter.username }}</strong></div><div><small>Owner</small><strong>{{ booking.product.owner.first_name|default:booking.product.owner.username }}</strong></div><div><small>Rental + deposit</small><strong>₹{{ booking.agreed_rent }} + ₹{{ booking.agreed_deposit }}</strong></div><div><small>Delivery total / each share</small><strong>₹{{ booking.delivery_total }} / ₹{{ booking.renter_delivery_share }}</strong></div></div>
+  <div class="order-actions"><a class="button button-secondary button-small" href="{% url 'chat_room' booking.pk %}">Message owner / renter</a><a class="button button-secondary button-small" href="{% url 'condition_report' booking.pk %}">Condition report</a><a class="button button-secondary button-small" href="{% url 'report_complaint' booking.pk %}">Report issue</a>
+  {% if booking.product.owner_id == user.id and booking.status == "requested" %}<form method="post" action="{% url 'booking_action' booking.pk 'accept' %}">{% csrf_token %}<button class="button button-primary button-small" type="submit">Accept</button></form><form method="post" action="{% url 'booking_action' booking.pk 'decline' %}">{% csrf_token %}<button class="button button-danger button-small" type="submit">Decline</button></form>{% endif %}
+  {% if booking.product.owner_id == user.id and booking.status == "accepted" %}<form method="post" action="{% url 'booking_action' booking.pk 'handover' %}">{% csrf_token %}<button class="button button-primary button-small" type="submit">Confirm handover</button></form>{% endif %}
+  {% if booking.status == "active" %}<form method="post" action="{% url 'booking_action' booking.pk 'return' %}">{% csrf_token %}<button class="button button-primary button-small" type="submit">Start return review</button></form>{% endif %}
+  {% if booking.status == "return_review" %}<form method="post" action="{% url 'booking_action' booking.pk 'confirm-return' %}">{% csrf_token %}<button class="button button-primary button-small" type="submit">Confirm item returned</button></form>{% endif %}
+  </div>
+  {% if booking.status == "completed" %}<div class="settlement-box"><strong>Return confirmed by both parties</strong><span>Estimated deposit refund: ₹{{ booking.estimated_refund }} · Proposed deduction: ₹{{ booking.proposed_deduction }}</span></div>{% endif %}
+</article>
+{% empty %}<div class="empty-state"><span class="empty-icon">↗</span><h3>Your rental journey starts here</h3><p>Book a nearby item or list something you own.</p><a class="button button-primary" href="{% url 'product_list' %}">Explore rentals</a></div>{% endfor %}
+</div>
+{% endblock %}

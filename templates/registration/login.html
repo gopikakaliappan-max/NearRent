@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Log in — NearRent{% endblock %}
+{% block content %}
+<section class="auth-wrap"><div class="auth-art"><span class="eyebrow">WELCOME BACK</span><h1>Your next find<br>is close by.</h1><p>Sign in to manage your listings, bookings and private rental conversations.</p><div class="auth-orbit">n</div></div><div class="form-card auth-card"><h2>Log in</h2><p class="form-help">Good to have you here.</p><form method="post">{% csrf_token %}{{ form.as_p }}{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}<button class="button button-primary button-wide" type="submit">Log in ↗</button></form><p class="auth-switch">New to NearRent? <a href="{% url 'register' %}">Create an account</a></p></div></section>
+{% endblock %}

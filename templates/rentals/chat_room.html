@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Booking messages — NearRent{% endblock %}
+{% block content %}
+<section class="page-intro compact-intro"><span class="eyebrow">PRIVATE BOOKING CHAT</span><h1>Let's coordinate.</h1><p>Booking #{{ booking.pk }} · {{ booking.product.title }}</p></section>
+<div class="chat-card" id="chat-app" data-api="{% url 'messages_api' booking.pk %}">
+  <div class="chat-header"><div class="chat-avatar">↔</div><div><strong>{{ booking.product.title }}</strong><small>Only this booking's renter and owner can access this conversation.</small></div><span class="status-pill status-{{ booking.status }}">{{ booking.get_status_display }}</span></div>
+  <div class="chat-messages" id="chat-messages" aria-live="polite"><div class="chat-loading">Loading conversation…</div></div>
+  <form class="chat-form" id="chat-form" method="post">{% csrf_token %}<input id="chat-input" name="body" maxlength="2000" placeholder="Message about pickup, delivery or return…" autocomplete="off" required><button class="button button-primary" type="submit">Send ↗</button></form>
+  <p class="micro-copy chat-note">Keep agreements in this chat. Never share passwords, verification codes or sensitive payment details.</p>
+</div>
+<script src="{% static 'js/chat.js' %}" defer></script>
+{% endblock %}

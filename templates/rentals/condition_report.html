@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Condition report — NearRent{% endblock %}
+{% block content %}
+<section class="page-intro compact-intro"><span class="eyebrow">RENTAL PASSPORT</span><h1>Record the condition.</h1><p>Booking #{{ booking.pk }} · {{ booking.product.title }}</p></section>
+<div class="form-card narrow-card"><p class="form-help">Add a report before handover or at return. Photos and notes help create a timeline, but do not automatically decide fault or deductions.</p><form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<button class="button button-primary" type="submit">Save condition report ↗</button></form></div>
+{% if booking.condition_reports.all %}<section class="section-block"><div class="section-heading"><div><h2>Condition timeline</h2><p>Reports saved for this booking.</p></div></div><div class="timeline">{% for report in booking.condition_reports.all %}<article class="timeline-item"><span class="timeline-dot"></span><div class="timeline-card"><div class="timeline-head"><strong>{{ report.get_stage_display }}</strong><small>{{ report.created_at|date:"d M Y, H:i" }}</small></div><p>{{ report.notes }}</p>{% if report.photo %}<img class="condition-photo" src="{{ report.photo.url }}" alt="Condition evidence">{% endif %}<small>Recorded by {{ report.created_by.first_name|default:report.created_by.username }}</small></div></article>{% endfor %}</div></section>{% endif %}
+{% endblock %}

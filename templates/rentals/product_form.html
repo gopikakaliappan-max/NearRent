@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}List an item — NearRent{% endblock %}
+{% block content %}
+<section class="page-intro"><span class="eyebrow">SHARE SOMETHING USEFUL</span><h1>List your item.</h1><p>Be clear about condition, price and location so renters know what to expect.</p></section>
+<div class="form-card narrow-card"><form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<div class="notice-inline">Privacy tip: enter a neighbourhood or public pickup area, not your full home address. Coordinates are optional for the prototype's distance feature.</div><button class="button button-primary" type="submit">Publish listing ↗</button></form></div>
+{% endblock %}

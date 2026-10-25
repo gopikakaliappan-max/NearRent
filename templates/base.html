@@ -1,0 +1,53 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}NearRent — Borrow better{% endblock %}</title>
+  <meta name="description" content="NearRent connects local owners and renters with clear booking, delivery and return records.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  <script defer src="{% static 'js/site.js' %}"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="{% url 'home' %}"><span class="brand-mark">n</span><span>near<span class="brand-accent">rent</span><small>GOOD THINGS, SHARED LOCALLY</small></span></a>
+    <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'about' %}">About</a>
+      <a href="{% url 'contact' %}">Contact</a>
+      <a href="{% url 'terms' %}">Terms</a>
+      <a href="{% url 'feedback' %}">Feedback</a>
+      <a href="{% url 'orders' %}">Orders</a>
+      <a href="{% url 'product_list' %}">Explore</a>
+      {% if user.is_authenticated %}
+        <a class="nav-cta" href="{% url 'register_product' %}">+ List an item</a>
+        <form class="logout-form" action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="nav-link-button" type="submit">Log out</button></form>
+      {% else %}
+        <a href="{% url 'login' %}">Log in</a>
+        <a class="nav-cta" href="{% url 'register' %}">Join free</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+<main class="page-shell">
+  {% if messages %}
+    <div class="flash-stack">{% for message in messages %}<div class="flash {{ message.tags }}">{{ message }}</div>{% endfor %}</div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <a class="brand footer-brand" href="{% url 'home' %}"><span class="brand-mark">n</span><span>nearrent<small>SHARE MORE. BUY LESS.</small></span></a>
+    <p>Neighbourhood rentals, made clearer.</p>
+    <div class="footer-links"><a href="{% url 'terms' %}">Terms & conditions</a><a href="{% url 'contact' %}">Help & contact</a></div>
+    <small>Demo project. Use safe handovers and agree on terms before exchanging items.</small>
+  </div>
+</footer>
+</body>
+</html>

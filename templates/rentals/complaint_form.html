@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Report an issue — NearRent{% endblock %}
+{% block content %}
+<section class="page-intro compact-intro"><span class="eyebrow">SAFETY & SUPPORT</span><h1>Report an issue.</h1><p>Booking #{{ booking.pk }} · {{ booking.product.title }}</p></section>
+<div class="form-card narrow-card"><p class="form-help">Describe what happened and include clear, factual details. An administrator can review this report.</p><form method="post">{% csrf_token %}{{ form.as_p }}<button class="button button-primary" type="submit">Submit report ↗</button></form></div>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Join NearRent{% endblock %}
+{% block content %}
+<section class="page-intro compact-intro"><span class="eyebrow">JOIN THE NEIGHBOURHOOD</span><h1>Make room for sharing.</h1><p>Create one account to rent items and list your own.</p></section>
+<div class="form-card narrow-card"><form method="post">{% csrf_token %}{{ form.as_p }}<button class="button button-primary button-wide" type="submit">Create account ↗</button></form><p class="auth-switch">Already a member? <a href="{% url 'login' %}">Log in</a></p></div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Request a rental — NearRent{% endblock %}
+{% block content %}
+<section class="page-intro compact-intro"><span class="eyebrow">BOOKING REQUEST</span><h1>Make it a rental.</h1><p>Confirm your dates and how you want to receive the item.</p></section>
+<div class="booking-layout"><aside class="booking-summary"><span class="summary-label">YOU'RE RENTING</span><h2>{{ product.title }}</h2><p>{{ product.location_name }}</p><div class="summary-row"><span>Daily rental</span><strong>₹{{ product.daily_rent }}</strong></div><div class="summary-row"><span>Security deposit</span><strong>₹{{ product.security_deposit }}</strong></div><div class="summary-row"><span>Delivery share</span><strong id="delivery-share">₹0.00</strong></div><div class="summary-row summary-total"><span>Estimated total</span><strong id="estimated-total">Choose dates</strong></div><p class="micro-copy">Estimate only. This demo records a payment ledger but does not process real payments.</p></aside>
+<div class="form-card"><form method="post" id="booking-form">{% csrf_token %}{{ form.as_p }}<div class="notice-inline">For owner-arranged delivery, enter the total agreed delivery cost. NearRent splits it equally by default. Direct pickup has no delivery fee.</div><button class="button button-primary" type="submit">Send rental request ↗</button></form></div></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+ const method = document.getElementById("id_delivery_method");
+ const fee = document.getElementById("delivery-total");
+ const start = document.getElementById("id_start_date");
+ const end = document.getElementById("id_end_date");
+ const share = document.getElementById("delivery-share");
+ const total = document.getElementById("estimated-total");
+ const daily = Number("{{ product.daily_rent }}");
+ const deposit = Number("{{ product.security_deposit }}");
+ function update() {
+   const delivery = method && method.value === "owner_delivery" ? Math.max(Number(fee.value || 0), 0) : 0;
+   if (method && method.value === "pickup" && fee) fee.value = "0.00";
+   share.textContent = "₹" + (delivery / 2).toFixed(2);
+   if (start.value && end.value && new Date(end.value) >= new Date(start.value)) {
+     const days = Math.max(1, Math.round((new Date(end.value) - new Date(start.value)) / 86400000) + 1);
+     total.textContent = "₹" + (days * daily + deposit + delivery / 2).toFixed(2);
+   } else { total.textContent = "Choose dates"; }
+ }
+ [method, fee, start, end].forEach(el => el && el.addEventListener("input", update));
+ update();
+});
+</script>
+{% endblock %}

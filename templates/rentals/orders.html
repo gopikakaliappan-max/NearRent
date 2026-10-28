@@ -14,6 +14,7 @@
   {% if booking.status == "return_review" %}<form method="post" action="{% url 'booking_action' booking.pk 'confirm-return' %}">{% csrf_token %}<button class="button button-primary button-small" type="submit">Confirm item returned</button></form>{% endif %}
   </div>
   {% if booking.status == "completed" %}<div class="settlement-box"><strong>Return confirmed by both parties</strong><span>Estimated deposit refund: ₹{{ booking.estimated_refund }} · Proposed deduction: ₹{{ booking.proposed_deduction }}</span></div>{% endif %}
+  <div class="feature-row"><a href="{% url 'rental_receipt' booking.pk %}">Printable receipt</a> · <a href="{% url 'extension_request' booking.pk %}">Request extension</a> · <a href="{% url 'cancellation_request' booking.pk %}">Cancellation request</a>{% if booking.status == 'completed' and booking.renter_id == user.id %} · <a href="{% url 'product_review' booking.pk %}">Review rental</a>{% endif %}</div>
 </article>
 {% empty %}<div class="empty-state"><span class="empty-icon">↗</span><h3>Your rental journey starts here</h3><p>Book a nearby item or list something you own.</p><a class="button button-primary" href="{% url 'product_list' %}">Explore rentals</a></div>{% endfor %}
 </div>

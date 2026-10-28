@@ -25,6 +25,7 @@
       <a href="{% url 'feedback' %}">Feedback</a>
       <a href="{% url 'orders' %}">Orders</a>
       <a href="{% url 'product_list' %}">Explore</a>
+      {% if user.is_authenticated %}<a href="{% url 'wishlist' %}">Wishlist</a><a href="{% url 'saved_searches' %}">Saved searches</a><a href="{% url 'reminders' %}">Reminders</a><a href="{% url 'owner_analytics' %}">Analytics</a><a href="{% url 'profile_verification' %}">Verify profile</a>{% endif %}
       {% if user.is_authenticated %}
         <a class="nav-cta" href="{% url 'register_product' %}">+ List an item</a>
         <form class="logout-form" action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="nav-link-button" type="submit">Log out</button></form>

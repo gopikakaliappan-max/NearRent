@@ -26,6 +26,7 @@ class ProductForm(forms.ModelForm):
 
 
 class BookingForm(forms.ModelForm):
+    promo_code = forms.CharField(required=False, max_length=32, label="Promo code (optional)")
     class Meta:
         model = Booking
         fields = ["start_date", "end_date", "delivery_method", "delivery_total"]
@@ -75,3 +76,51 @@ class ComplaintForm(forms.ModelForm):
         model = Complaint
         fields = ["category", "details"]
         widgets = {"details": forms.Textarea(attrs={"rows": 4})}
+
+from .models import ProductReview, ProductAvailability, ExtensionRequest, CancellationRequest, SavedSearch, BookingReminder, ListingReport, UserProfile
+
+class ProfileVerificationForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['verification_note']
+        widgets = {'verification_note': forms.TextInput(attrs={'placeholder':'Brief note for admin review; do not enter sensitive ID numbers'})}
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = ProductReview
+        fields = ['rating','comment']
+        widgets = {'comment': forms.Textarea(attrs={'rows':3})}
+
+class AvailabilityForm(forms.ModelForm):
+    class Meta:
+        model = ProductAvailability
+        fields = ['date','note']
+        widgets = {'date': forms.DateInput(attrs={'type':'date'})}
+
+class ExtensionRequestForm(forms.ModelForm):
+    class Meta:
+        model = ExtensionRequest
+        fields = ['proposed_end_date','reason']
+        widgets = {'proposed_end_date': forms.DateInput(attrs={'type':'date'}), 'reason': forms.TextInput()}
+
+class CancellationRequestForm(forms.ModelForm):
+    class Meta:
+        model = CancellationRequest
+        fields = ['reason']
+
+class SavedSearchForm(forms.ModelForm):
+    class Meta:
+        model = SavedSearch
+        fields = ['query','category']
+
+class ReminderForm(forms.ModelForm):
+    class Meta:
+        model = BookingReminder
+        fields = ['message','remind_on']
+        widgets = {'remind_on': forms.DateInput(attrs={'type':'date'})}
+
+class ListingReportForm(forms.ModelForm):
+    class Meta:
+        model = ListingReport
+        fields = ['reason','details']
+        widgets = {'details': forms.Textarea(attrs={'rows':3})}

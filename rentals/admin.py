@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Booking, ConditionReport, Message, Feedback, ContactMessage, Complaint
+from .models import Product, Booking, ConditionReport, Message, Feedback, ContactMessage, Complaint, Wishlist, UserProfile, ProductReview, ProductAvailability, ExtensionRequest, CancellationRequest, PromoCode, SavedSearch, BookingReminder, ListingReport
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -18,3 +18,5 @@ admin.site.register(Message)
 admin.site.register(Feedback)
 admin.site.register(ContactMessage)
 admin.site.register(Complaint)
+
+admin.site.register([Wishlist, UserProfile, ProductReview, ProductAvailability, ExtensionRequest, CancellationRequest, PromoCode, SavedSearch, BookingReminder, ListingReport])

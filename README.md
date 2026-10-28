@@ -5,7 +5,7 @@ NearRent is a student-project starter for a hyperlocal rental marketplace. It in
 ## Stack
 - HTML, CSS, basic JavaScript
 - Python + Django
-- MySQL database (PyMySQL adapter)
+- SQLite database 
 - Django built-in authentication
 - Image uploads for product and condition photos
 

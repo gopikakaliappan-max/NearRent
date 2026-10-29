@@ -1,157 +1,149 @@
-# NearRent — Django + MySQL starter project
+# NearRent — Nearby Product Rental Platform
 
-NearRent is a student-project starter for a hyperlocal rental marketplace. It includes product listings, booking requests, shared delivery-cost calculations, booking-only private messaging, condition reports, return confirmations, feedback, contact form, terms page, and admin-managed complaints.
+NearRent is a Django-based web application that connects people who want to rent products with nearby product owners. It supports short-term product rentals, booking requests, delivery-cost sharing, product condition tracking, and communication between renters and owners.
 
-## Stack
-- HTML, CSS, basic JavaScript
-- Python + Django
-- SQLite database 
-- Django built-in authentication
-- Image uploads for product and condition photos
+## Tech Stack
 
-## Three custom differentiators in this project
-These are the project's chosen differentiators, not a claim that no other rental platform has similar features:
-1. **Rental Passport:** a booking-linked before/after condition timeline.
-2. **SplitFair delivery:** show the total owner-arranged delivery cost and split it equally by default.
-3. **Return Shield:** both renter and owner confirm the return before the booking is marked completed.
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Python, Django
+- **Database:** SQLite
+- **Authentication:** Django built-in authentication
+- **Image Handling:** Pillow
+- **Static Files:** WhiteNoise
+- **Version Control:** Git and GitHub
+- **Deployment:** Render
 
-## Important prototype limits
-- Payment records are simulated. No real payments, deposits, or refunds are processed.
-- The 10 km radius filter works when the renter enters latitude/longitude and listings have coordinates. The prototype does not automatically read browser GPS or geocode addresses; add consent-based geolocation or a geocoding provider if needed.
-- Chat uses short-interval HTTP polling (not WebSockets). Only the renter and listing owner can access a booking chat.
-- Email/mobile verification, live geolocation, payment gateway, delivery partner integration, moderation tooling, and production deployment security are not fully implemented.
-- Do not use this demo to handle real high-value products or real payment deposits without security, privacy, legal, and operational review.
+## Key Features
 
-## 1. Install Python dependencies
-Use Python 3.11+ recommended.
+1. **User Registration and Login** — Users can create accounts and sign in to the platform.
+2. **Product Listings** — Owners can list products with descriptions, photos, rental prices, and condition details.
+3. **Product Discovery** — Users can browse available rental products and search by relevant details.
+4. **Location-Based Filtering** — Find products within a 10 km radius when valid coordinates are provided.
+5. **Rental Booking** — Renters can submit booking requests for selected rental periods.
+6. **Booking Management** — Owners and renters can view and manage their bookings.
+7. **SplitFair Delivery** — Displays owner-arranged delivery costs and calculates an equal split by default.
+8. **Private Booking Chat** — Enables communication between the renter and product owner for a booking.
+9. **Rental Passport** — Booking-linked condition reports help document an item's condition before and after rental.
+10. **Return Shield** — Both renter and owner confirm the return before the booking is marked completed.
+11. **Wishlist** — Signed-in users can save products and view their saved listings.
+12. **Ratings and Reviews** — Eligible renters can review products after completed bookings.
+13. **Availability Calendar** — Owners can block unavailable dates to help prevent conflicting bookings.
+14. **Rental Extensions and Cancellations** — Booking participants can request extensions or cancellations.
+15. **Promo Codes** — Administrators can configure eligible percentage discounts.
+16. **Smart Price Suggestions** — Provides category-based average rental price suggestions.
+17. **Owner Analytics** — Displays listing and booking statistics for owners.
+18. **Saved Searches and Reminders** — Users can save search preferences and manage on-site reminders.
+19. **Printable Rental Receipts** — Booking participants can print or save receipt pages as PDFs.
+20. **Feedback and Complaint Reporting** — Supports feedback, contact messages, and reports for administrative review.
+21. **Admin Management** — Django's admin panel supports application data management and staff review workflows.
+
+## Custom Project Highlights
+
+### Rental Passport
+A booking-linked condition timeline helps renters and owners record an item's condition before and after rental.
+
+### SplitFair Delivery
+Displays owner-arranged delivery costs and calculates an equal cost split by default.
+
+### Return Shield
+Requires both the renter and owner to confirm the return before the booking is marked as completed.
+
+## Installation and Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/gopikakaliappan-max/NearRent.git
+cd NearRent
+```
+
+### 2. Create and activate a virtual environment
+
+On Windows:
 
 ```bash
 python -m venv .venv
-```
-
-Windows:
-```bash
 .venv\Scripts\activate
 ```
 
-macOS/Linux:
-```bash
-source .venv/bin/activate
-```
+### 3. Install dependencies
 
-Then:
 ```bash
 pip install -r requirements.txt
 ```
 
-## 2. Create the MySQL database
-Start MySQL and run:
+### 4. Configure the database
 
-```sql
-CREATE DATABASE nearrent_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+The project uses SQLite. Django creates and manages the database file through migrations, so a separate database server is not required.
+
+Check `nearrent/settings.py` to confirm that the database engine is configured as:
+
+```python
+'ENGINE': 'django.db.backends.sqlite3',
 ```
 
-Set environment variables before starting Django.
+### 5. Apply migrations
 
-Windows PowerShell:
-```powershell
-$env:DB_NAME="nearrent_db"
-$env:DB_USER="root"
-$env:DB_PASSWORD="your_mysql_password"
-$env:DB_HOST="127.0.0.1"
-$env:DB_PORT="3306"
-$env:SECRET_KEY="replace-with-a-long-random-secret"
-$env:DEBUG="True"
-```
-
-macOS/Linux:
-```bash
-export DB_NAME=nearrent_db
-export DB_USER=root
-export DB_PASSWORD='your_mysql_password'
-export DB_HOST=127.0.0.1
-export DB_PORT=3306
-export SECRET_KEY='replace-with-a-long-random-secret'
-export DEBUG=True
-```
-
-You can copy `.env.example` as a reference, but the starter does not auto-load `.env`; export the variables in your terminal or add `python-dotenv` and configure it.
-
-## 3. Create tables and admin account
-From the folder containing `manage.py`:
+Run these commands from the folder containing `manage.py`:
 
 ```bash
-python manage.py makemigrations rentals
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
-```
-
-Open:
-- Website: http://127.0.0.1:8000/
-- Admin: http://127.0.0.1:8000/admin/
-
-## 4. Suggested demo steps
-1. Register two accounts (one will list an item, the other will rent).
-2. Log in as owner and list a product. Use a neighbourhood name, not a public home address.
-3. Log in as renter and submit a rental request.
-4. Switch back to owner and accept the request in Orders.
-5. Open the booking chat from either account and exchange messages.
-6. Owner confirms handover.
-7. Both parties add condition reports from the booking.
-8. Start return review and have each participant confirm the return.
-9. Check the final booking status and estimated deposit refund.
-
-## 5. Security and product notes
-- `DEBUG=True` is for local development only. Set `DEBUG=False` and configure secure settings before deployment.
-- Use HTTPS in production.
-- Use least-privilege database credentials instead of the MySQL root account for deployment.
-- Review upload size/type validation and malware handling before accepting public uploads.
-- The current sample does not implement email/mobile OTP verification.
-- Never store passwords in custom fields or logs.
-- The terms page is a starter template, not legal advice.
-
-## NearRent Feature Pack — 13 working features
-
-This version includes the following implemented feature workflows in the Django app (not merely a list of ideas):
-
-1. **Wishlist** — signed-in users can save/remove listings and view saved items.
-2. **Verified profiles** — users submit a profile review request; staff can review and change status in Django admin. This is manual review, not government-ID verification.
-3. **Product ratings and reviews** — a renter can review a completed booking once; reviews appear on the listing.
-4. **Availability calendar** — owners can block/unblock unavailable dates; booking requests that overlap blocked dates are rejected.
-5. **Rental extension requests** — a booking participant requests a later end date; the other participant can approve/decline, and conflicting dates are checked.
-6. **Cancellation workflow** — either participant requests cancellation; the other can approve/decline. No real refund is processed.
-7. **Promo codes** — admins create active percentage discounts with optional expiry and usage limits; valid codes can be applied during booking.
-8. **Smart price suggestions** — owners see the average daily rent of other available listings in the same category.
-9. **Owner analytics** — each owner sees listing count, booking count, completed bookings, tracked rental value, wishlist saves, and listing booking counts.
-10. **Saved searches** — users can save a query/category and reopen that search.
-11. **Booking reminders** — users can create and mark reminders done. The prototype displays them on the site; it does not send push/email alerts automatically.
-12. **Printable rental receipt** — participants can print or save an HTML receipt as PDF from the browser. It is not proof of payment.
-13. **Suspicious listing reports** — signed-in users can report another user's listing for admin review; a report does not automatically remove the listing.
-
-### Apply database changes
-
-The added features introduce new models and fields. From the folder containing `manage.py`, run:
-
-```bash
-python manage.py makemigrations rentals
+python manage.py makemigrations
 python manage.py migrate
 python manage.py check
-python manage.py createsuperuser  # only if you do not already have an admin account
+```
+
+### 6. Create an administrator account
+
+```bash
+python manage.py createsuperuser
+```
+
+Skip this step if you already have an administrator account.
+
+### 7. Start the development server
+
+```bash
 python manage.py runserver
 ```
 
-Use the existing database settings in `.env.example` / `nearrent/settings.py`. **Back up your existing database before applying migrations** if you have real project data. Existing user accounts and passwords are not intentionally changed by these model additions.
+Open the website at:
 
-### Where to find features
+http://127.0.0.1:8000/
 
-After login, the navigation bar includes Wishlist, Saved searches, Reminders, Analytics, and Verify profile. Product details provide wishlist, owner availability and price suggestion tools, plus a report link for non-owners. Booking cards provide printable receipts, extension requests, cancellation requests, and a review link after a completed booking. Promo codes are managed through Django admin.
+The Django admin panel is available at:
 
-### Prototype boundaries
+http://127.0.0.1:8000/admin/
 
-- This is a student-project prototype, not a production-ready marketplace. Test each flow with two test accounts before presenting it.
-- Profile verification is staff-managed and does not validate identity documents.
-- Reminder records are shown in the app but no background scheduler or email/SMS/push delivery is included.
+## Live Deployment
+
+**Live Website:** https://nearrent.onrender.com
+
+**GitHub Repository:** https://github.com/gopikakaliappan-max/NearRent
+
+The live website hostname above is an example based on the earlier deployment configuration. Replace it with the exact URL displayed in your Render Dashboard if it differs.
+
+## Prototype Limitations
+
+- Payment records are simulated. The application does not process real payments, security deposits, or refunds.
+- The 10 km filter requires the renter and listings to have valid latitude and longitude coordinates.
+- The prototype does not automatically obtain browser GPS coordinates or convert addresses into coordinates.
+- Chat uses HTTP polling rather than WebSockets.
+- Profile verification is a staff-managed review process, not official identity verification.
+- Reminders appear within the application; automatic email, SMS, and push notifications are not implemented.
 - Price suggestions use a simple category average, not machine learning.
-- Receipts are printable HTML; no payment gateway or real payment processing is included.
-- Run `makemigrations` and `migrate` before starting the updated project. The ZIP does not include your local database or secrets.
+- Printable receipts are not proof of payment.
+- Email/mobile OTP verification and payment gateway integration are not fully implemented.
+- Additional security, privacy, upload validation, and operational review are needed before real commercial use.
+
+## Security Notes
+
+- Keep `DEBUG=False` in production.
+- Use a strong, randomly generated Django `SECRET_KEY` stored in environment variables.
+- Configure `ALLOWED_HOSTS` for the deployed domain.
+- Use HTTPS for public deployment.
+- Never commit passwords, secret keys, or private credentials to GitHub.
+- Back up your local database before applying significant model changes.
+
+## Project Objective
+
+NearRent aims to make short-term product rentals convenient by connecting nearby owners with people who need items temporarily. The platform encourages product reuse, reduces unnecessary purchases, and provides booking, communication, and condition-tracking workflows in one place.
